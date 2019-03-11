@@ -33,7 +33,8 @@
 				myinput: '',
 				iconColor: 'rgb(15,204,185)',
 				inputWidth: '80%',
-				placeholder: 'Écrivez ici...'
+				placeholder: 'Écrivez ici...',
+				default_error_message: "Je n'ai pas compris, veuillez reformuler"
 			}
 		},
 		computed: {
@@ -53,49 +54,48 @@
 		    submit: function() {
 				var vm = this;
 				// COOKIE 
-				vm.pushMessages({'isUser':true,'text':vm.myinput});
+				if ( vm.myinput.replace(/\s/g, '').length )
+				{
+					vm.pushMessages({'isUser':true,'text':vm.myinput});
+					$.ajax({
+					  url: "https://api.dialogflow.com/v1/query?v=20170712",
+					  type: "POST",
+					  dataType: 'json',
+					  tryCount : 0,
+					  retryLimit : 3,
+					  data: JSON.stringify({
+					    'query':vm.myinput,
+					    'lang':'fr',
+					    'sessionId': this.$store.getters.getSessionId,
+					    'timezone':'Europe/Paris'
+					  }),
+					  headers: {
+					    'Authorization' : 'Bearer 5ea0abfbb3684b40896389aec2ceb8ea',
+					    'Content-Type' : 'application/json'
+					  }
+					  ,
+					  success: function(data) {
+					    var speech = data.result.fulfillment.speech;
+					    if( !speech.replace(/\s/g, '').length ) {
+					    	vm.pushMessages({'isUser':false,'text':vm.default_error_message});
+					    } else {
+					    	vm.pushMessages({'isUser':false,'text':speech});
+					    }
+					  },
 
-				$.ajax({
-				  url: "https://api.dialogflow.com/v1/query?v=20170712",
-				  type: "POST",
-				  dataType: 'json',
-				  tryCount : 0,
-				  retryLimit : 3,
-				  data: JSON.stringify({
-				    'query':vm.myinput,
-				    'lang':'fr',
-				    'sessionId': this.$store.getters.getSessionId,
-				    'timezone':'Europe/Paris'
-				  }),
-				  headers: {
-				    'Authorization' : 'Bearer 5ea0abfbb3684b40896389aec2ceb8ea',
-				    'Content-Type' : 'application/json'
-				  }
-				  ,
-				  success: function(data) {
-				    var speech = data.result.fulfillment.speech;
-				    vm.pushMessages({'isUser':false,'text':speech});
-				  },
-
-				  error : function(xhr, textStatus, errorThrown ) {
-				      if (textStatus == 'timeout') {
+					  error : function(xhr, textStatus, errorThrown ) {
 				          this.tryCount++;
 				          if (this.tryCount <= this.retryLimit) {
 				              $.ajax(this);
 				              return;
-				          }            
+				          } else {
+				          	vm.pushMessages({'isUser':false,'text':vm.default_error_message});
+				          }
 				          return;
-				      }
-					  if (xhr.status == 500) {
-				        vm.pushMessages({'isUser':false,'text':"Je n'ai pas compris, veuillez reformuler"});
-				      } 
-				      else {
-				        vm.pushMessages({'isUser':false,'text':"Je n'ai pas compris, veuillez reformuler"});
-				      }
-				  }
+					  }
 
-				});
-
+					});
+				}
 		    },
 
 		    afterSubmit: function() {
@@ -148,19 +148,4 @@
 		font-size: 155%;
 	}
 
-/*
-	form {
-		display: flex;
-	}
-
-	button {
-		width: 20%;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		border: none;
-		box-shadow: none;
-		background: white;
-	}
-*/
 </style>
