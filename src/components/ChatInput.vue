@@ -34,7 +34,6 @@
 				iconColor: 'rgb(15,204,185)',
 				inputWidth: '80%',
 				placeholder: 'Écrivez ici...',
-				default_error_message: "Je n'ai pas compris, veuillez reformuler"
 			}
 		},
 		computed: {
@@ -65,19 +64,19 @@
 					  retryLimit : 3,
 					  data: JSON.stringify({
 					    'query':vm.myinput,
-					    'lang':'fr',
+					    'lang': this.$store.state.language,
 					    'sessionId': this.$store.getters.getSessionId,
-					    'timezone':'Europe/Paris'
+					    'timezone': this.$store.state.timezone
 					  }),
 					  headers: {
-					    'Authorization' : 'Bearer 5ea0abfbb3684b40896389aec2ceb8ea',
+					    'Authorization' : 'Bearer '+this.$store.state.auth_key,
 					    'Content-Type' : 'application/json'
 					  }
 					  ,
 					  success: function(data) {
 					    var speech = data.result.fulfillment.speech;
 					    if( !speech.replace(/\s/g, '').length ) {
-					    	vm.pushMessages({'isUser':false,'text':vm.default_error_message});
+					    	vm.pushMessages({'isUser':false,'text': vm.$store.state.default_error_message});
 					    } else {
 					    	vm.pushMessages({'isUser':false,'text':speech});
 					    }
@@ -89,7 +88,7 @@
 				              $.ajax(this);
 				              return;
 				          } else {
-				          	vm.pushMessages({'isUser':false,'text':vm.default_error_message});
+				          	vm.pushMessages({'isUser':false,'text': vm.$store.state.default_error_message});
 				          }
 				          return;
 					  }

@@ -6,8 +6,7 @@
             <template v-for="message in getMessages">
                 <div class="row" style="margin-bottom:20px;min-height:55px;">
                   <div v-bind:class="[message.isUser ? messageUserClass : messageBotClass]" class="col" style="min-height: 100%;">
-                    <span class="span_chat">
-                      {{ message.text }}  
+                    <span class="span_chat" v-html="message.text">
                     </span>                
                   </div>
                 </div>

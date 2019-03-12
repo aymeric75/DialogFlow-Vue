@@ -10,6 +10,11 @@ export const store = new Vuex.Store({
 		showButton : true,
 		messages : [],
 		sessionId: '',
+		auth_key: '5ea0abfbb3684b40896389aec2ceb8ea',
+		timezone: 'timezone',
+		language: 'fr',
+		faq_url: 'https://www.random.org/faq/',
+		default_error_message: "Je n'ai pas compris, veuillez consulter notre <a href='"+this.faq_url+"'>faq</a>"
 	},
 
 	getters: {
@@ -25,7 +30,7 @@ export const store = new Vuex.Store({
 		},
 		getMessages: state => {
 			return state.messages;
-		}
+		},
 	},
 
 	mutations: {
