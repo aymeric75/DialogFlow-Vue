@@ -14,7 +14,8 @@ export const store = new Vuex.Store({
 		timezone: 'timezone',
 		language: 'fr',
 		faq_url: 'https://www.random.org/faq/',
-		default_error_message: "Je n'ai pas compris, veuillez consulter notre <a href='"+this.faq_url+"'>faq</a>"
+		default_error_message: "Je n'ai pas compris, veuillez consulter notre <a href='"+this.faq_url+"'>faq</a>",
+		showDots: false
 	},
 
 	getters: {
@@ -31,6 +32,9 @@ export const store = new Vuex.Store({
 		getMessages: state => {
 			return state.messages;
 		},
+		getShowDots: state => {
+			return state.showDots;
+		},
 	},
 
 	mutations: {
@@ -46,7 +50,10 @@ export const store = new Vuex.Store({
 		},
 		setSessionId: state => {
 			state.sessionId = Math.random().toString(36).substring(2, 10)+'-'+Math.random().toString(36).substring(2, 6)+'-'+Math.random().toString(36).substring(2, 6)+'-'+Math.random().toString(36).substring(2, 6)+'-'+Math.random().toString(36).substring(2, 18);
-		}
+		},
+		changeShowDots: (state, payload) => {
+			state.showDots = payload;
+		},
 	},
 
 	actions: {
@@ -59,6 +66,9 @@ export const store = new Vuex.Store({
 		},
 		showButton: ( { commit }, payload ) => {
 			commit('showButton', payload)
-		}
+		},
+		changeShowDots: ( { commit }, payload ) => {
+			commit('changeShowDots', payload)
+		},
 	}
 });

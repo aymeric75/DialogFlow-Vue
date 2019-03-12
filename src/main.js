@@ -11,6 +11,9 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 Vue.use(VueCookie);
 Vue.use(BootstrapVue);
 
+var VueScrollTo = require('vue-scrollto');
+Vue.use(VueScrollTo)
+
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import { store } from './store/store'

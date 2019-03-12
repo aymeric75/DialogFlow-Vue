@@ -22,7 +22,6 @@
 	import JQuery from 'jquery'
 	let $ = JQuery
 
-
 	import {mapActions} from 'vuex'
 	import {mapGetters} from 'vuex'
 
@@ -47,15 +46,38 @@
 		methods: {
 
 			...mapActions([
-				'pushMessages'
+				'pushMessages',
+				'changeShowDots'
 			]),
 
 		    submit: function() {
 				var vm = this;
+
+				var options = {
+				    container: '.chatlogs',
+				    easing: 'ease-in',
+				    offset: 100,
+				    force: true,
+				    cancelable: true,
+				    onStart: function(element) {
+				      // scrolling started
+				    },
+				    onDone: function(element) {
+				      // scrolling is done
+				    },
+				    onCancel: function() {
+				      // scrolling has been interrupted
+				    },
+				    x: false,
+				    y: true
+				};
+
 				// COOKIE 
+
 				if ( vm.myinput.replace(/\s/g, '').length )
 				{
 					vm.pushMessages({'isUser':true,'text':vm.myinput});
+					vm.$scrollTo('.scroll_ancer', 300, options);
 					$.ajax({
 					  url: "https://api.dialogflow.com/v1/query?v=20170712",
 					  type: "POST",
@@ -76,10 +98,28 @@
 					  success: function(data) {
 					    var speech = data.result.fulfillment.speech;
 					    if( !speech.replace(/\s/g, '').length ) {
-					    	vm.pushMessages({'isUser':false,'text': vm.$store.state.default_error_message});
+					    	vm.changeShowDots(true);
+						  	setTimeout(function() {
+						  		vm.pushMessages({'isUser':false,'text': vm.$store.state.default_error_message});
+						  		vm.$scrollTo('.scroll_ancer', 300, options);
+						  		vm.changeShowDots(false);
+
+						  		},
+						  		1000
+						  	);
+
 					    } else {
-					    	vm.pushMessages({'isUser':false,'text':speech});
-					    }
+
+					    	vm.changeShowDots(true);
+						  	setTimeout(function() {
+						  		vm.pushMessages({'isUser':false,'text':speech});
+						  		vm.$scrollTo('.scroll_ancer', 300, options);
+						  		vm.changeShowDots(false);
+						  		},
+						  		1000
+						  	);
+					    };
+					    
 					  },
 
 					  error : function(xhr, textStatus, errorThrown ) {
@@ -88,7 +128,14 @@
 				              $.ajax(this);
 				              return;
 				          } else {
-				          	vm.pushMessages({'isUser':false,'text': vm.$store.state.default_error_message});
+					    	vm.changeShowDots(true);
+						  	setTimeout(function() {
+						  		vm.pushMessages({'isUser':false,'text': vm.$store.state.default_error_message});
+						  		vm.$scrollTo('.scroll_ancer', 300, options);
+						  		vm.changeShowDots(false);
+						  		},
+						  		1000
+						  	);
 				          }
 				          return;
 					  }
