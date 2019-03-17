@@ -10,16 +10,32 @@ export const store = new Vuex.Store({
 		showButton : true,
 		messages : [],
 		sessionId: '',
-		auth_key: '5ea0abfbb3684b40896389aec2ceb8ea',
 		timezone: 'timezone',
 		language: 'fr',
-		faq_url: 'https://www.random.org/faq/',
+		showDots: false,
+
+		faq_url: '',
+		auth_key: '',
 		default_error_message: "Je n'ai pas compris, veuillez consulter notre <a href='"+this.faq_url+"'>faq</a>",
-		showDots: false
+		chatbox_title: 'LiveChat Service',
+
+		openchat_text_color : 'transparent',  // NO HOVER
+		openchat_bg_color : 'lightgray', // NO HOVER
+
+		openchat_text_over_color : 'red',
+		openchat_bg_over_color : 'orange',
+
+		openchat_loader_color: 'grey',
+
+		icon_color: 'cyan',
+		icon_over_color: 'red',
+		icon_bg_color: 'black',
+		icon_bg_over_color: 'grey',
+		input_bg_color: 'lightgray',
+		loading_dots_color: 'cyan'
 	},
 
 	getters: {
-
 		getSessionId: state => {
 			return state.sessionId;
 		},
@@ -34,6 +50,12 @@ export const store = new Vuex.Store({
 		},
 		getShowDots: state => {
 			return state.showDots;
+		},
+		getOCtextColor: state => {
+			return state.openchat_text_color;
+		},
+		getOCbgColor: state => {
+			return state.openchat_bg_color;
 		},
 	},
 
@@ -54,7 +76,17 @@ export const store = new Vuex.Store({
 		changeShowDots: (state, payload) => {
 			state.showDots = payload;
 		},
+		setAuth_key: (state, payload) => {
+			state.auth_key = payload;
+		},
+		setOCtextColor: (state, payload) => {
+			state.openchat_text_color = payload;
+		}
+
+
 	},
+
+	// openchat_text_color
 
 	actions: {
 
@@ -70,5 +102,11 @@ export const store = new Vuex.Store({
 		changeShowDots: ( { commit }, payload ) => {
 			commit('changeShowDots', payload)
 		},
-	}
+		setAuth_key: ( { commit }, payload ) => {
+			commit('setAuth_key', payload)
+		},
+		setOCtextColor: ( { commit }, payload ) => {
+			commit('setOCtextColor', payload)
+		},
+	},
 });

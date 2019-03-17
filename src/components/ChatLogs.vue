@@ -11,14 +11,12 @@
                   </div>
                 </div>
             </template>
-
           </div>
         </div>
-
         <div class="loading-dots" v-if="getShowDots">
-          <div class="loading-dots--dot"></div>
-          <div class="loading-dots--dot"></div>
-          <div class="loading-dots--dot"></div>
+          <div class="loading-dots--dot" :style="{background: this.$store.state.loading_dots_color}"></div>
+          <div class="loading-dots--dot" :style="{background: this.$store.state.loading_dots_color}"></div>
+          <div class="loading-dots--dot" :style="{background: this.$store.state.loading_dots_color}"></div>
         </div>
         <div class="scroll_ancer"></div>
       </div>
@@ -29,6 +27,9 @@
   
   import {mapMutations} from 'vuex'
   import {mapGetters} from 'vuex'
+
+  import { mapState } from 'vuex'
+
 
   export default {
 
@@ -50,9 +51,23 @@
         'getShowChat',
         'getMessages',
         'getShowDots'
-      ])
+      ]),
+      ...mapState([
+        'messages',
+        'loading_dots_color'
+      ]),
     },
 
+    watch: {
+      messages(newValue, oldValue) {
+        if(oldValue.length > 10) {
+          newValue.length = 10;
+        }
+      },
+      loading_dots_color(newValue, oldValue) {
+        this.$store.state.loading_dots_color = newValue;
+      },
+    }
 }
 
 </script>
@@ -109,11 +124,6 @@
 }
 
 
-
-
-
-
-
 @keyframes dot-keyframes {
   0% {
     opacity: 0.4;
@@ -134,7 +144,6 @@
 }
 .loading-dots--dot {
   animation: dot-keyframes 1.5s infinite ease-in-out;
-  background-color: rgb(15, 204, 185);
   border-radius: 10px;
   display: inline-block;
   height: 10px;

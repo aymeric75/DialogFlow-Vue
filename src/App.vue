@@ -14,6 +14,7 @@
   import ChatBox from './components/ChatBox.vue'
   import ChatOpen from './components/ChatOpen'
 
+  import {mapActions} from 'vuex'
   import {mapMutations} from 'vuex'
   import {mapGetters} from 'vuex'
 
@@ -37,10 +38,144 @@
         'pushMessages',
         'setSessionId'
       ]),
+      ...mapActions([
+        'pushMessages',
+        'changeShowDots',
+        'setAuth_key',
+        'setOpenchat',
+        'setOCtextColor'
+      ]),
+
     },
 
     mounted: function() {
       this.setSessionId();
+    },
+
+    created() {
+      this.$http.get('', {
+        params: {
+          'userToken': '1',
+          'faq_url': '1',
+          'openchat_text_color' : '1',
+          'openchat_bg_color' : '1',
+          'openchat_text_over_color' : '1',
+          'openchat_bg_over_color' : '1',
+          'openchat_loader_color' : '1',
+          'icon_color' : '1',
+          'icon_over_color' : '1',
+          'icon_bg_color' : '1',
+          'icon_bg_over_color' : '1',
+          'input_bg_color' : '1',
+          'loading_dots_color' : '1',
+          'chatbox_title' : '1'
+        }
+      })
+        .then(response => {
+
+          console.log(response);
+
+          var server_resp = JSON.parse(response.bodyText);
+          this.setAuth_key(server_resp.userToken);
+
+
+          console.log(server_resp);
+
+
+
+          if( server_resp.chatbox_title!=null && server_resp.chatbox_title!='' )
+          {
+            this.$store.state.chatbox_title = server_resp.chatbox_title;
+          } else {
+            this.$store.state.chatbox_title = 'LiveChat';
+          }
+
+          if( server_resp.openchat_text_color!=null && server_resp.openchat_text_color!='' )
+          {
+            console.log("ici");
+            this.setOCtextColor(server_resp.openchat_text_color);
+          } else {
+            console.log("la");
+            this.setOCtextColor('black');
+          }
+
+
+          if( server_resp.openchat_bg_color!=null && server_resp.openchat_bg_color!='' )
+          {
+            this.$store.state.openchat_bg_color = server_resp.openchat_bg_color;
+          } else {
+            this.$store.state.openchat_bg_color = 'lightgray';
+          }
+
+          if( server_resp.openchat_text_over_color!=null && server_resp.openchat_text_over_color!='' )
+          {
+            this.$store.state.openchat_text_over_color = server_resp.openchat_text_over_color;
+          } else {
+            this.$store.state.openchat_text_over_color = 'white';
+          }
+
+          if( server_resp.openchat_bg_over_color!=null && server_resp.openchat_bg_over_color!='' )
+          {
+            this.$store.state.openchat_bg_over_color = server_resp.openchat_bg_over_color;
+          } else {
+            this.$store.state.openchat_bg_over_color = 'gray';
+          }
+
+
+          if( server_resp.openchat_loader_color!=null && server_resp.openchat_loader_color!='' )
+          {
+            this.$store.state.openchat_loader_color = server_resp.openchat_loader_color;
+          } else {
+            this.$store.state.openchat_loader_color = 'gray';
+          }
+
+
+          if( server_resp.icon_color!=null && server_resp.icon_color!='' )
+          {
+            this.$store.state.icon_color = server_resp.icon_color;
+          }  else {
+            this.$store.state.icon_color = 'cyan';
+          }
+
+          if( server_resp.icon_over_color!=null && server_resp.icon_over_color!='' )
+          {
+            this.$store.state.icon_over_color = server_resp.icon_over_color;
+          }  else {
+            this.$store.state.icon_over_color = 'cyan';
+          }
+
+          if( server_resp.icon_bg_color!=null && server_resp.icon_bg_color!='' )
+          {
+            this.$store.state.icon_bg_color = server_resp.icon_bg_color;
+          }  else {
+            this.$store.state.icon_bg_color = 'black';
+          }
+
+
+          if( server_resp.input_bg_color!=null && server_resp.input_bg_color!='' )
+          {
+            this.$store.state.input_bg_color = server_resp.input_bg_color;
+          }  else {
+            this.$store.state.input_bg_color = 'black';
+          }
+
+          if( server_resp.icon_bg_over_color!=null && server_resp.icon_bg_over_color!='' )
+          {
+            console.log("iiciiii");
+            this.$store.state.icon_bg_over_color = server_resp.icon_bg_over_color;
+          }  else {
+            this.$store.state.icon_bg_over_color = 'black';
+            console.log("laaaaaa");
+          }
+
+          if( server_resp.loading_dots_color!=null && server_resp.loading_dots_color!='' )
+          {
+            this.$store.state.loading_dots_color = server_resp.loading_dots_color;
+          } else {
+            this.$store.state.loading_dots_color = 'cyan';
+          }
+
+        });
     }
 
   }

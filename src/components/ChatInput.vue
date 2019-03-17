@@ -1,13 +1,13 @@
 
 <template>
-    <div class="row rowInput" v-show="getShowChat">
+    <div class="row rowInput" v-show="getShowChat" :style="{ backgroundColor: this.$store.state.input_bg_color }">
       <div class="col" style="display:flex;align-items: center;">
-        <div class="form-group">
+        <div class="form-group" style="height:54px;">
           <form @submit.prevent="submit" @submit="afterSubmit">
 			<div class="input-group mb-3">
 			  <input type="text" class="form-control" :placeholder="placeholder" :aria-label="placeholder" aria-describedby="basic-addon2" v-model="myinput">
 			  <div class="input-group-append">
-			    <button class="btn btn-outline-secondary" type="submit"><font-awesome-icon icon="paper-plane" :style="{ color: iconColor }" /></button>
+			    <button class="btn btn-outline-secondary" type="submit" @mouseover="isHover=true;changeIconColor(icon_over_color);" @mouseout="isHover=false;changeIconColor(icon_color);" :style="[isHover ? styleHover : styleNoHover]"><font-awesome-icon icon="paper-plane" /></button>
 			  </div>
 			</div>
           </form>
@@ -15,6 +15,7 @@
       </div>
     </div>
 </template>
+
 
 
 <script>
@@ -25,30 +26,76 @@
 	import {mapActions} from 'vuex'
 	import {mapGetters} from 'vuex'
 
+	import { mapState } from 'vuex'
+
+
 	export default {
 
 		data: function() {
 			return {
 				myinput: '',
-				iconColor: 'rgb(15,204,185)',
 				inputWidth: '80%',
 				placeholder: 'Écrivez ici...',
+				isHover: false,
+				styleNoHover: { backgroundColor: this.$store.state.icon_bg_color },
+				styleHover: { backgroundColor: this.$store.state.icon_bg_over_color },
+				styleIconHover: { backgroundColor: this.$store.state.icon_over_color },
+				styleIconNoHover: { backgroundColor: this.$store.state.icon_color }
 			}
 		},
 		computed: {
 			...mapGetters([
 				'getSessionId',
 				'getShowChat',
-				'getMessages'
+				'getMessages',
+				'getIconColor'
+			]),
+
+			...mapState([
+				'icon_color',
+				'icon_over_color',
+				'icon_bg_color',
+				'icon_bg_over_color',
+				'input_bg_color',
 			]),
 
 		},
+
+	    watch: {
+	      icon_color(newValue, oldValue) {
+	      	this.$store.state.icon_color = newValue;
+	      },
+	      icon_over_color(newValue, oldValue) {
+	      	this.$store.state.icon_over_color = newValue;
+	      },
+	      icon_bg_color(newValue, oldValue) {
+	      	this.styleNoHover.backgroundColor = newValue;
+	      },
+	      icon_bg_over_color(newValue, oldValue) {
+	      	this.styleHover.backgroundColor = newValue;
+	      },
+	      input_bg_color(newValue, oldValue) {
+	      	this.$store.state.input_bg_color = newValue;
+	      },
+	    },
+
+	    updated: function() {
+	    	$('button > svg').css('color', this.$store.state.icon_color);
+	    	$('button:hover > svg').css('color', this.$store.state.icon_over_color);
+	    },
+
+
 		methods: {
 
 			...mapActions([
 				'pushMessages',
 				'changeShowDots'
 			]),
+
+			changeIconColor(value) {
+				$('button > svg').css('color',value);
+			},
+
 
 		    submit: function() {
 				var vm = this;
@@ -147,8 +194,8 @@
 		    afterSubmit: function() {
 		      this.myinput = "";
 		    },
-		}
-	}
+		} /* methods */
+	} /* export default */
 
 
 </script>
@@ -156,7 +203,8 @@
 <style scoped>
 
 	.rowInput {
-	  //background: gray;
+	  margin: 0;
+	  background: lightgray;
 	}
 
 	.form-group {
@@ -181,7 +229,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		background:rgb(219,219,219);
+		background: transparent;
 	}
 
 	button {

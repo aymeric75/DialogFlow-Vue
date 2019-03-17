@@ -3,7 +3,7 @@
     <div class="col colChatBox">
       <div class="row row-closeButton">
         <div class="col">
-          <span>{{ title }}</span>
+          <span v-html="this.$store.state.chatbox_title"></span>
           <button type="button" class="close close-button" aria-label="Close" @click="showChat(false);showButton(true);">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -25,7 +25,6 @@
   export default {
     data: function(){
       return {
-        title: 'LiveChat Service Client'
       }
     },
     components: {
