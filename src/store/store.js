@@ -18,21 +18,22 @@ export const store = new Vuex.Store({
 		auth_key: '',
 		default_error_message: "Je n'ai pas compris, veuillez consulter notre <a href='"+this.faq_url+"'>faq</a>",
 		chatbox_title: 'LiveChat Service',
+		placeholder: 'Enter your message...',
 
-		openchat_text_color : 'transparent',  // NO HOVER
-		openchat_bg_color : 'lightgray', // NO HOVER
+		openchat_text_color : '#ffffff',  // NO HOVER
+		openchat_bg_color : '#001f3f', // NO HOVER
 
-		openchat_text_over_color : 'red',
-		openchat_bg_over_color : 'orange',
+		openchat_text_over_color : '#001f3f',
+		openchat_bg_over_color : '#ffffff',
 
-		openchat_loader_color: 'grey',
+		openchat_loader_color: '#AAAAAA',
 
-		icon_color: 'cyan',
-		icon_over_color: 'red',
-		icon_bg_color: 'black',
-		icon_bg_over_color: 'grey',
-		input_bg_color: 'lightgray',
-		loading_dots_color: 'cyan'
+		icon_color: '#001f3f',
+		icon_over_color: '#39CCCC',
+		icon_bg_color: '#39CCCC',
+		icon_bg_over_color: '#001f3f',
+		input_bg_color: '#DDDDDD',
+		loading_dots_color: '#001f3f'
 	},
 
 	getters: {
@@ -98,6 +99,9 @@ export const store = new Vuex.Store({
 		},
 		showButton: ( { commit }, payload ) => {
 			commit('showButton', payload)
+		},
+		setSessionId: ( { commit }, payload ) => {
+			commit('setSessionId', payload)
 		},
 		changeShowDots: ( { commit }, payload ) => {
 			commit('changeShowDots', payload)

@@ -16,9 +16,8 @@
 
 <script>
 
-	import {mapActions} from 'vuex'
-	import {mapGetters} from 'vuex'
-
+	import { mapActions } from 'vuex'
+	import { mapGetters } from 'vuex'
 	import { mapState } from 'vuex'
 
 	export default {
@@ -69,6 +68,7 @@
 		    'showButton'
 		  ]),
 		  click: function() {
+
 		  	var vm = this;
 		  	this.showSpinner = true;
 		  	setTimeout(function() {
@@ -78,7 +78,7 @@
 		  		},
 		  		1000
 		  	);
-		  }
+		  },
 		}
 	}
 
@@ -87,7 +87,7 @@
 <style scoped>
 	
 .openchat {
-  position: absolute;
+  position: absolute !important;
   bottom: 0;
   width: 100%;
 }
@@ -104,6 +104,7 @@ button {
 
 .text {
 	font-weight: bold;
+	font-size: 15px;
 }
 
 .spinner-border {

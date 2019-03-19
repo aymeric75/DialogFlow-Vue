@@ -10,13 +10,19 @@ import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 
+import JQuery from 'jquery'
+var $ = JQuery
+
 Vue.use(VueCookie);
 Vue.use(BootstrapVue);
 Vue.use(VueResource);
 
 
-Vue.http.options.root = 'http://127.0.0.1/prestashop1.6/modules/dialogflowchat/ajax.php';
+var href = window.location.href;
+href = href.replace(/\/[a-z]{2}\//,'/')
+var dir = href.substring(0, href.lastIndexOf('/')) + "/modules/dialogflowchat/ajax.php";
 
+Vue.http.options.root = dir;
 
 var VueScrollTo = require('vue-scrollto');
 Vue.use(VueScrollTo)

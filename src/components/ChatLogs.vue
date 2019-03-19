@@ -121,6 +121,7 @@
 .span_chat {
   padding: 15px 20px;
   border-radius: 5px;
+  font-size: 13px;
 }
 
 

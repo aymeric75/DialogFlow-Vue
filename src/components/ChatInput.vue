@@ -2,7 +2,7 @@
 <template>
     <div class="row rowInput" v-show="getShowChat" :style="{ backgroundColor: this.$store.state.input_bg_color }">
       <div class="col" style="display:flex;align-items: center;">
-        <div class="form-group" style="height:54px;">
+        <div class="form-group">
           <form @submit.prevent="submit" @submit="afterSubmit">
 			<div class="input-group mb-3">
 			  <input type="text" class="form-control" :placeholder="placeholder" :aria-label="placeholder" aria-describedby="basic-addon2" v-model="myinput">
@@ -20,9 +20,6 @@
 
 <script>
 
-	import JQuery from 'jquery'
-	let $ = JQuery
-
 	import {mapActions} from 'vuex'
 	import {mapGetters} from 'vuex'
 
@@ -35,7 +32,7 @@
 			return {
 				myinput: '',
 				inputWidth: '80%',
-				placeholder: 'Écrivez ici...',
+				placeholder: this.$store.state.placeholder,
 				isHover: false,
 				styleNoHover: { backgroundColor: this.$store.state.icon_bg_color },
 				styleHover: { backgroundColor: this.$store.state.icon_bg_over_color },
@@ -82,6 +79,7 @@
 	    updated: function() {
 	    	$('button > svg').css('color', this.$store.state.icon_color);
 	    	$('button:hover > svg').css('color', this.$store.state.icon_over_color);
+	    	this.placeholder=this.$store.state.placeholder;
 	    },
 
 
@@ -211,6 +209,11 @@
 		margin-bottom: 0;
 		width:inherit;
 		margin: 0 15px;
+		height: 40px;
+	}
+
+	form {
+		height: 100%;
 	}
 
 	.form-control {
@@ -218,10 +221,11 @@
 		width: 80%;
 		border:none;
 		background:rgb(245,245,245);
+		font-size: 13px;
 	}
 
 	.input-group {
-		height: 55px;
+		height: 100%;
 	}
 
 	.input-group-append {

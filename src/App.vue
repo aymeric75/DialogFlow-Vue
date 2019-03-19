@@ -4,11 +4,7 @@
     <chat-open v-show="getShowButton"></chat-open>
   </div>
 </template>
-
 <script>
-
-  import JQuery from 'jquery'
-  let $ = JQuery
 
 
   import ChatBox from './components/ChatBox.vue'
@@ -36,23 +32,24 @@
       ...mapMutations([
         'turnShowChatFalse',
         'pushMessages',
-        'setSessionId'
       ]),
       ...mapActions([
         'pushMessages',
         'changeShowDots',
         'setAuth_key',
         'setOpenchat',
-        'setOCtextColor'
+        'setOCtextColor',
+        'setSessionId'
       ]),
 
     },
 
-    mounted: function() {
+/*    mounted: function() {
       this.setSessionId();
-    },
+    },*/
 
     created() {
+      this.setSessionId();
       this.$http.get('', {
         params: {
           'userToken': '1',
@@ -68,19 +65,14 @@
           'icon_bg_over_color' : '1',
           'input_bg_color' : '1',
           'loading_dots_color' : '1',
-          'chatbox_title' : '1'
+          'chatbox_title' : '1',
+          'placeholder' : '1'
         }
       })
         .then(response => {
 
-          console.log(response);
-
-          var server_resp = JSON.parse(response.bodyText);
+          var server_resp = response.body;
           this.setAuth_key(server_resp.userToken);
-
-
-          console.log(server_resp);
-
 
 
           if( server_resp.chatbox_title!=null && server_resp.chatbox_title!='' )
@@ -92,10 +84,8 @@
 
           if( server_resp.openchat_text_color!=null && server_resp.openchat_text_color!='' )
           {
-            console.log("ici");
             this.setOCtextColor(server_resp.openchat_text_color);
           } else {
-            console.log("la");
             this.setOCtextColor('black');
           }
 
@@ -161,11 +151,9 @@
 
           if( server_resp.icon_bg_over_color!=null && server_resp.icon_bg_over_color!='' )
           {
-            console.log("iiciiii");
             this.$store.state.icon_bg_over_color = server_resp.icon_bg_over_color;
           }  else {
             this.$store.state.icon_bg_over_color = 'black';
-            console.log("laaaaaa");
           }
 
           if( server_resp.loading_dots_color!=null && server_resp.loading_dots_color!='' )
@@ -175,8 +163,20 @@
             this.$store.state.loading_dots_color = 'cyan';
           }
 
+
+          if( server_resp.placeholder!=null && server_resp.placeholder!='' )
+          {
+            this.$store.state.placeholder = server_resp.placeholder;
+          } else {
+            this.$store.state.placeholder = 'Enter your text...';
+          }
+
         });
-    }
+
+
+        $('#app').parent().css('z-index','9999');
+
+    },  /* created */
 
   }
 </script>
@@ -184,12 +184,25 @@
 <style>
 
 #app {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
   width: 25%;
   height: 550px;
   border-radius: 5px;
+  position: fixed;
+  bottom: 35px;
+  right: 30px;
+  padding-bottom: 0 !important;
+}
+
+@media ( max-width: 1025px ) {  
+  #app {
+    width: 55%;
+  }     
+}
+
+@media ( max-width: 767px ) {  
+  #app {
+    width: 85%;
+  }     
 }
 
 </style>

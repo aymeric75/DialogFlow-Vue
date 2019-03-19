@@ -3,7 +3,7 @@
     <div class="col colChatBox">
       <div class="row row-closeButton">
         <div class="col">
-          <span v-html="this.$store.state.chatbox_title"></span>
+          <span class="text" v-html="this.$store.state.chatbox_title"></span>
           <button type="button" class="close close-button" aria-label="Close" @click="showChat(false);showButton(true);">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -48,6 +48,9 @@
 
 <style scoped>
 
+  .text {
+    font-size: 15px;
+  }
 
 
   .close-button:focus {
@@ -82,6 +85,7 @@
     height: 10%;
     margin: 0;
     border-bottom: 1px solid rgb(245,245,245);
+    background-color: white;
   }
 
   .row-closeButton div {
